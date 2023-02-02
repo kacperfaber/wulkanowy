@@ -813,4 +813,32 @@
     <string name="error_feature_disabled">Funkcja wyłączona przez szkołę</string>
     <string name="error_feature_not_available">Funkcja niedostępna. Zaloguj się w trybie innym niż Mobilne API</string>
     <string name="error_field_required">To pole jest wymagane</string>
+
+    <string name="all_options">Opcje</string>
+    <string name="all_edit">Edytuj</string>
+    <string name="all_delete">Usuń</string>
+    <string name="all_plus_value">Wartość plusa</string>
+    <string name="all_minus_value">Wartość minusa</string>
+    <string name="all_clear">Wyczyść</string>
+
+    <!--Calculator -->
+    <string name="calculator_item_weight">Waga %1$s</string>
+    <string name="calculator_item_grade">Wartość %1$s</string>
+    <string name="calculator_item_title_fallback">Brak Tytułu</string>
+    <string name="calculator_empty">Brak ocen</string>
+    <string name="calculator_add_item_title">Dodaj ocenę</string>
+    <string name="calculator_edit_item_title">Edytuj ocenę</string>
+    <string name="calculator_item_add">Dodaj ocenę</string>
+    <string name="calculator_item_edit">Edytuj ocenę</string>
+    <string name="calculator_average_from_x_items">%1$d ocen</string>
+    <string name="calculator_invalid_grade_error">Niepoprawny format, użyj 5+, 5-, 5, 5.0…</string>
+    <string name="calculator_options_dialog_title">Opcje</string>
+    <string name="invalid_minus_or_plus_modifier">Niepoprawna wartość. Spróbuj 0.33, .33…</string>
+    <string name="calculator_invalid_weight_error">Niepoprawna waga</string>
+    <string name="new_calculator_from_grades">Nowy kalkulator</string>
+    <string name="append_calculator">Dodaj do kalkulatora</string>
+    <string name="change_this_settings_will_clear_the_calculator">Zmiana tych ustawień wyczyści kalkulator.</string>
+    <string name="grade_header_required">Ocena*</string>
+    <string name="grade_weight_required">Waga*</string>
+    <string name="calculator_title">Kalkulator średniej</string>
 </resources>

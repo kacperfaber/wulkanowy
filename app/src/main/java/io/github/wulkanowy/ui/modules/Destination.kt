@@ -3,6 +3,7 @@ package io.github.wulkanowy.ui.modules
 import androidx.fragment.app.Fragment
 import io.github.wulkanowy.data.serializers.LocalDateSerializer
 import io.github.wulkanowy.ui.modules.attendance.AttendanceFragment
+import io.github.wulkanowy.ui.modules.calculator.CalculatorFragment
 import io.github.wulkanowy.ui.modules.conference.ConferenceFragment
 import io.github.wulkanowy.ui.modules.dashboard.DashboardFragment
 import io.github.wulkanowy.ui.modules.exam.ExamFragment
@@ -46,7 +47,16 @@ sealed class Destination {
         MORE(More),
         MESSAGE(Message),
         MOBILE_DEVICE(MobileDevice),
+        CALCULATOR(Calculator),
         SETTINGS(Settings);
+    }
+
+    @Serializable
+    object Calculator : Destination() {
+        override val destinationType: Type
+            get() = Type.CALCULATOR
+        override val destinationFragment: Fragment
+            get() = CalculatorFragment.newInstance()
     }
 
     @Serializable

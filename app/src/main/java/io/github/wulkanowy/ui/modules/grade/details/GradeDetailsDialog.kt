@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import io.github.wulkanowy.R
 import io.github.wulkanowy.data.db.entities.Grade
@@ -28,19 +27,22 @@ class GradeDetailsDialog : DialogFragment() {
 
         private const val COLOR_THEME_KEY = "Theme"
 
-        fun newInstance(grade: Grade, colorTheme: GradeColorTheme) = GradeDetailsDialog().apply {
-            arguments = bundleOf(
-                ARGUMENT_KEY to grade,
-                COLOR_THEME_KEY to colorTheme
-            )
-        }
+        fun newInstance(grade: Grade, colorTheme: GradeColorTheme) =
+            GradeDetailsDialog().apply {
+                arguments = Bundle().apply {
+                    putSerializable(ARGUMENT_KEY, grade)
+                    putSerializable(COLOR_THEME_KEY, colorTheme)
+                }
+            }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NO_TITLE, 0)
-        grade = requireArguments().serializable(ARGUMENT_KEY)
-        gradeColorTheme = requireArguments().serializable(COLOR_THEME_KEY)
+        arguments?.run {
+            grade = getSerializable(ARGUMENT_KEY) as Grade
+            gradeColorTheme = getSerializable(COLOR_THEME_KEY) as GradeColorTheme
+        }
     }
 
     override fun onCreateView(

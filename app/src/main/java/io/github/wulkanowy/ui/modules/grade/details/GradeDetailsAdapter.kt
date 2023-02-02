@@ -34,6 +34,9 @@ class GradeDetailsAdapter @Inject constructor() : BaseExpandableAdapter<Recycler
 
     var onClickListener: (Grade, position: Int) -> Unit = { _, _ -> }
 
+    var onHeaderLongClickListener: (header: GradeDetailsHeader, headerPosition: Int) -> Boolean =
+        { _, _ -> true }
+
     lateinit var gradeColorTheme: GradeColorTheme
 
     fun setDataItems(data: List<GradeDetailsItem>, expandMode: GradeExpandMode = this.expandMode) {
@@ -148,6 +151,12 @@ class GradeDetailsAdapter @Inject constructor() : BaseExpandableAdapter<Recycler
             gradeHeaderContainer.isEnabled = expandMode != GradeExpandMode.ALWAYS_EXPANDED
             gradeHeaderContainer.setOnClickListener {
                 expandGradeHeader(headerPosition, header, holder)
+            }
+            gradeHeaderContainer.setOnLongClickListener {
+                return@setOnLongClickListener onHeaderLongClickListener(
+                    header,
+                    headerPosition
+                )
             }
         }
     }
