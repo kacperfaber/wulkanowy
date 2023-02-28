@@ -1,8 +1,7 @@
 package io.github.wulkanowy.ui.modules.calculator
 
 import io.github.wulkanowy.data.repositories.PreferencesRepository
-import io.mockk.MockKAnnotations
-import io.mockk.every
+import io.mockk.*
 import io.mockk.impl.annotations.MockK
 import org.junit.Before
 import org.junit.Test
@@ -19,6 +18,8 @@ class CalculatorTest {
     @Before
     fun setup() {
         MockKAnnotations.init(this)
+        every {prefRepo getProperty "calculatorItems"} returns listOf<CalculatorItem>()
+        every {prefRepo setProperty  "calculatorItems" value any<List<CalculatorItem>>()} just Runs
         calculator = Calculator(prefRepo)
     }
 
