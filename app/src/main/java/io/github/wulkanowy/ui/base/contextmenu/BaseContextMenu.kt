@@ -23,7 +23,7 @@ abstract class BaseContextMenu : BaseDialogFragment<DialogContextMenuBinding>(),
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         return DialogContextMenuBinding.inflate(inflater).apply { binding = this }.root
     }
 
