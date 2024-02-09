@@ -1,5 +1,6 @@
-Wersja 2.3.3
+Wersja 2.3.5
 
-— poprawiliśmy kolejne usterki przy odświeżaniu danych (teraz to powinno działać już dużo lepiej)
+— naprawiliśmy ładowanie frekwencji dla szkół używających eduOne
+— naprawiliśmy wielokrotne wysyłanie powiadomień o zmianach w planie lekcji
 
 Pełna lista zmian: https://github.com/wulkanowy/wulkanowy/releases

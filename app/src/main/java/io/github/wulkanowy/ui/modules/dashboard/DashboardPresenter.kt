@@ -239,6 +239,14 @@ class DashboardPresenter @Inject constructor(
         loadData(selectedDashboardTiles, forceRefresh = true)
     }
 
+    fun onRetryAfterCaptcha() {
+        view?.run {
+            showErrorView(false)
+            showProgress(true)
+        }
+        loadData(selectedDashboardTiles, forceRefresh = true)
+    }
+
     fun onViewReselected() {
         Timber.i("Dashboard view is reselected")
         view?.run {
@@ -316,7 +324,7 @@ class DashboardPresenter @Inject constructor(
                 ) { luckyNumberResource, messageResource, attendanceResource ->
                     val resList = listOf(luckyNumberResource, messageResource, attendanceResource)
 
-                    DashboardItem.HorizontalGroup(
+                    resList to DashboardItem.HorizontalGroup(
                         isLoading = resList.any { it is Resource.Loading },
                         error = resList.map { it.errorOrNull }.let { errors ->
                             if (errors.all { it != null }) {
@@ -341,9 +349,9 @@ class DashboardPresenter @Inject constructor(
                     )
                 })
         }
-            .filterNot { it.isLoading && forceRefresh }
+            .filterNot { (_, it) -> it.isLoading && forceRefresh }
             .distinctUntilChanged()
-            .onEach {
+            .onEach { (_, it) ->
                 updateData(it, forceRefresh)
 
                 if (it.isLoading) {
@@ -361,7 +369,7 @@ class DashboardPresenter @Inject constructor(
                 )
                 errorHandler.dispatch(it)
             }
-            .launch("horizontal_group ${if (forceRefresh) "-forceRefresh" else ""}")
+            .launchWithUniqueRefreshJob("horizontal_group", forceRefresh)
     }
 
     private fun loadGrades(student: Student, forceRefresh: Boolean) {
@@ -395,7 +403,7 @@ class DashboardPresenter @Inject constructor(
                                 subjectWithGrades = it.dataOrNull,
                                 gradeTheme = preferencesRepository.gradeColorTheme,
                                 isLoading = true
-                            ), forceRefresh
+                            ), false
                         )
 
                         if (!it.dataOrNull.isNullOrEmpty()) {
@@ -427,13 +435,13 @@ class DashboardPresenter @Inject constructor(
     private fun loadLessons(student: Student, forceRefresh: Boolean) {
         flatResourceFlow {
             val semester = semesterRepository.getCurrentSemester(student)
-            val date = LocalDate.now()
+            val date = LocalDate.now().nextOrSameSchoolDay
 
             timetableRepository.getTimetable(
                 student = student,
                 semester = semester,
                 start = date,
-                end = date.plusDays(1),
+                end = date,
                 forceRefresh = forceRefresh
             )
         }
@@ -444,7 +452,7 @@ class DashboardPresenter @Inject constructor(
                         if (forceRefresh) return@onEach
                         updateData(
                             DashboardItem.Lessons(it.dataOrNull, isLoading = true),
-                            forceRefresh
+                            false
                         )
 
                         if (!it.dataOrNull?.lessons.isNullOrEmpty()) {
@@ -501,7 +509,7 @@ class DashboardPresenter @Inject constructor(
                         val data = it.dataOrNull.orEmpty()
                         updateData(
                             DashboardItem.Homework(data, isLoading = true),
-                            forceRefresh
+                            false
                         )
 
                         if (data.isNotEmpty()) {
@@ -535,7 +543,7 @@ class DashboardPresenter @Inject constructor(
                         if (forceRefresh) return@onEach
                         updateData(
                             DashboardItem.Announcements(it.dataOrNull.orEmpty(), isLoading = true),
-                            forceRefresh
+                            false
                         )
 
                         if (!it.dataOrNull.isNullOrEmpty()) {
@@ -578,7 +586,7 @@ class DashboardPresenter @Inject constructor(
                         if (forceRefresh) return@onEach
                         updateData(
                             DashboardItem.Exams(it.dataOrNull.orEmpty(), isLoading = true),
-                            forceRefresh
+                            false
                         )
 
                         if (!it.dataOrNull.isNullOrEmpty()) {
@@ -619,7 +627,7 @@ class DashboardPresenter @Inject constructor(
                         if (forceRefresh) return@onEach
                         updateData(
                             DashboardItem.Conferences(it.dataOrNull.orEmpty(), isLoading = true),
-                            forceRefresh
+                            false
                         )
 
                         if (!it.dataOrNull.isNullOrEmpty()) {
@@ -654,7 +662,7 @@ class DashboardPresenter @Inject constructor(
                     is Resource.Loading -> {
                         Timber.i("Loading dashboard admin message data started")
                         if (forceRefresh) return@onEach
-                        updateData(DashboardItem.AdminMessages(), forceRefresh)
+                        updateData(DashboardItem.AdminMessages(), false)
                     }
 
                     is Resource.Success -> {
@@ -684,7 +692,7 @@ class DashboardPresenter @Inject constructor(
     private fun loadAds(forceRefresh: Boolean) {
         presenterScope.launch {
             if (!forceRefresh) {
-                updateData(DashboardItem.Ads(), forceRefresh)
+                updateData(DashboardItem.Ads(), false)
             }
 
             val dashboardAdItem =
@@ -805,6 +813,8 @@ class DashboardPresenter @Inject constructor(
         val filteredItems = itemsLoadedList.filterNot {
             it.type == DashboardItem.Type.ACCOUNT || it.type == DashboardItem.Type.ADMIN_MESSAGE
         }
+        val dataLoadedAdminMessageItem =
+            itemsLoadedList.find { it.type == DashboardItem.Type.ADMIN_MESSAGE && it.isDataLoaded } as DashboardItem.AdminMessages?
         val isAccountItemError =
             itemsLoadedList.find { it.type == DashboardItem.Type.ACCOUNT }?.error != null
         val isGeneralError =
@@ -826,7 +836,7 @@ class DashboardPresenter @Inject constructor(
                 showRefresh(false)
                 if ((forceRefresh && wasGeneralError) || !forceRefresh) {
                     showContent(false)
-                    showErrorView(true)
+                    showErrorView(true, dataLoadedAdminMessageItem)
                     setErrorDetails(lastError)
                 }
             }
@@ -853,6 +863,28 @@ class DashboardPresenter @Inject constructor(
         if (forceRefresh) {
             onEach {
                 if (it is Resource.Success) {
+                    cancelJobs(jobName)
+                } else if (it is Resource.Error) {
+                    cancelJobs(jobName)
+                }
+            }.launch(jobName)
+        } else {
+            launch(jobName)
+        }
+    }
+
+    @JvmName("launchWithUniqueRefreshJobHorizontalGroup")
+    private fun Flow<Pair<List<Resource<*>>, *>>.launchWithUniqueRefreshJob(
+        name: String,
+        forceRefresh: Boolean
+    ) {
+        val jobName = if (forceRefresh) "$name-forceRefresh" else name
+
+        if (forceRefresh) {
+            onEach { (resources, _) ->
+                if (resources.all { it is Resource.Success<*> }) {
+                    cancelJobs(jobName)
+                } else if (resources.any { it is Resource.Error<*> }) {
                     cancelJobs(jobName)
                 }
             }.launch(jobName)
