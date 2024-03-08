@@ -22,7 +22,7 @@ sealed class AppMenuItem {
             SchoolAndTeachersAppMenuItem(),
             MobileDevicesAppMenuItem(),
             ConferenceAppMenuItem(),
-            CalculatorAppMenuItem(),
+            AverageCalculatorAppMenuItem(),
             MessageAppMenuItem()
         ).sortedBy { it.order }
     }
@@ -35,18 +35,6 @@ sealed class AppMenuItem {
     abstract val title: Int
 
     abstract val destinationType: Destination.Type
-
-    @Serializable
-    data class CalculatorAppMenuItem(override var order: Int = 0) : AppMenuItem() {
-        @Transient
-        override val icon = R.drawable.ic_main_grade
-
-        @Transient
-        override val title = R.string.calculator_title
-
-        @Transient
-        override val destinationType = Destination.Type.CALCULATOR
-    }
 
     @Serializable
     data class DashboardAppMenuItem(override var order: Int = 0) : AppMenuItem() {
@@ -215,5 +203,18 @@ sealed class AppMenuItem {
 
         @Transient
         override val destinationType = Destination.Type.MOBILE_DEVICE
+    }
+
+    @Serializable
+    data class AverageCalculatorAppMenuItem(override var order: Int = 13) : AppMenuItem() {
+
+        @Transient
+        override val icon = R.drawable.ic_main_calculator
+
+        @Transient
+        override val title = R.string.calculator_title
+
+        @Transient
+        override val destinationType = Destination.Type.AVERAGE_CALCULATOR
     }
 }
