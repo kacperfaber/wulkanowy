@@ -14,6 +14,7 @@ import io.github.wulkanowy.data.db.dao.CompletedLessonsDao
 import io.github.wulkanowy.data.db.dao.ConferenceDao
 import io.github.wulkanowy.data.db.dao.ExamDao
 import io.github.wulkanowy.data.db.dao.GradeDao
+import io.github.wulkanowy.data.db.dao.GradeDescriptiveDao
 import io.github.wulkanowy.data.db.dao.GradePartialStatisticsDao
 import io.github.wulkanowy.data.db.dao.GradePointsStatisticsDao
 import io.github.wulkanowy.data.db.dao.GradeSemesterStatisticsDao
@@ -24,6 +25,7 @@ import io.github.wulkanowy.data.db.dao.MailboxDao
 import io.github.wulkanowy.data.db.dao.MessageAttachmentDao
 import io.github.wulkanowy.data.db.dao.MessagesDao
 import io.github.wulkanowy.data.db.dao.MobileDeviceDao
+import io.github.wulkanowy.data.db.dao.MutedMessageSendersDao
 import io.github.wulkanowy.data.db.dao.NoteDao
 import io.github.wulkanowy.data.db.dao.NotificationDao
 import io.github.wulkanowy.data.db.dao.RecipientDao
@@ -44,6 +46,7 @@ import io.github.wulkanowy.data.db.entities.CompletedLesson
 import io.github.wulkanowy.data.db.entities.Conference
 import io.github.wulkanowy.data.db.entities.Exam
 import io.github.wulkanowy.data.db.entities.Grade
+import io.github.wulkanowy.data.db.entities.GradeDescriptive
 import io.github.wulkanowy.data.db.entities.GradePartialStatistics
 import io.github.wulkanowy.data.db.entities.GradePointsStatistics
 import io.github.wulkanowy.data.db.entities.GradeSemesterStatistics
@@ -54,6 +57,7 @@ import io.github.wulkanowy.data.db.entities.Mailbox
 import io.github.wulkanowy.data.db.entities.Message
 import io.github.wulkanowy.data.db.entities.MessageAttachment
 import io.github.wulkanowy.data.db.entities.MobileDevice
+import io.github.wulkanowy.data.db.entities.MutedMessageSender
 import io.github.wulkanowy.data.db.entities.Note
 import io.github.wulkanowy.data.db.entities.Notification
 import io.github.wulkanowy.data.db.entities.Recipient
@@ -154,7 +158,9 @@ import javax.inject.Singleton
         TimetableHeader::class,
         SchoolAnnouncement::class,
         Notification::class,
-        AdminMessage::class
+        AdminMessage::class,
+        MutedMessageSender::class,
+        GradeDescriptive::class,
     ],
     autoMigrations = [
         AutoMigration(from = 44, to = 45),
@@ -165,6 +171,9 @@ import javax.inject.Singleton
         AutoMigration(from = 55, to = 56),
         AutoMigration(from = 56, to = 57, spec = Migration57::class),
         AutoMigration(from = 57, to = 58, spec = Migration58::class),
+        AutoMigration(from = 58, to = 59),
+        AutoMigration(from = 59, to = 60),
+        AutoMigration(from = 60, to = 61),
     ],
     version = AppDatabase.VERSION_SCHEMA,
     exportSchema = true
@@ -173,7 +182,7 @@ import javax.inject.Singleton
 abstract class AppDatabase : RoomDatabase() {
 
     companion object {
-        const val VERSION_SCHEMA = 58
+        const val VERSION_SCHEMA = 61
 
         fun getMigrations(sharedPrefProvider: SharedPrefProvider, appInfo: AppInfo) = arrayOf(
             Migration2(),
@@ -298,4 +307,8 @@ abstract class AppDatabase : RoomDatabase() {
     abstract val notificationDao: NotificationDao
 
     abstract val adminMessagesDao: AdminMessageDao
+
+    abstract val mutedMessageSendersDao: MutedMessageSendersDao
+  
+    abstract val gradeDescriptiveDao: GradeDescriptiveDao
 }

@@ -1,15 +1,31 @@
 package io.github.wulkanowy.utils
 
+import android.util.AndroidRuntimeException
 import java.net.CookiePolicy
 import java.net.CookieStore
 import java.net.HttpCookie
 import java.net.URI
+import javax.inject.Inject
+import javax.inject.Singleton
 import android.webkit.CookieManager as WebkitCookieManager
 import java.net.CookieManager as JavaCookieManager
 
-class WebkitCookieManagerProxy : JavaCookieManager(null, CookiePolicy.ACCEPT_ALL) {
+@Singleton
+class WebkitCookieManagerProxy @Inject constructor() :
+    JavaCookieManager(null, CookiePolicy.ACCEPT_ALL) {
 
-    private val webkitCookieManager: WebkitCookieManager = WebkitCookieManager.getInstance()
+    val webkitCookieManager: WebkitCookieManager? = getCookieManager()
+
+    /**
+     * @see [https://stackoverflow.com/a/70354583/6695449]
+     */
+    private fun getCookieManager(): WebkitCookieManager? {
+        return try {
+            WebkitCookieManager.getInstance()
+        } catch (e: AndroidRuntimeException) {
+            null
+        }
+    }
 
     override fun put(uri: URI?, responseHeaders: Map<String?, List<String?>>?) {
         if (uri == null || responseHeaders == null) return
@@ -23,7 +39,7 @@ class WebkitCookieManagerProxy : JavaCookieManager(null, CookiePolicy.ACCEPT_ALL
 
             // process each of the headers
             for (headerValue in responseHeaders[headerKey].orEmpty()) {
-                webkitCookieManager.setCookie(url, headerValue)
+                webkitCookieManager?.setCookie(url, headerValue)
             }
         }
     }
@@ -34,7 +50,7 @@ class WebkitCookieManagerProxy : JavaCookieManager(null, CookiePolicy.ACCEPT_ALL
     ): Map<String, List<String>> {
         require(!(uri == null || requestHeaders == null)) { "Argument is null" }
         val res = mutableMapOf<String, List<String>>()
-        val cookie = webkitCookieManager.getCookie(uri.toString())
+        val cookie = webkitCookieManager?.getCookie(uri.toString())
         if (cookie != null) res["Cookie"] = listOf(cookie)
         return res
     }
@@ -50,7 +66,7 @@ class WebkitCookieManagerProxy : JavaCookieManager(null, CookiePolicy.ACCEPT_ALL
                 cookies.remove(uri, cookie)
 
             override fun removeAll(): Boolean {
-                webkitCookieManager.removeAllCookies(null)
+                webkitCookieManager?.removeAllCookies(null) ?: return false
                 return true
             }
         }

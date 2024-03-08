@@ -56,6 +56,7 @@
     <string name="login_invalid_email">Неверный e-mail</string>
     <string name="login_invalid_login">Используйте назначенный логин вместо e-mail</string>
     <string name="login_invalid_custom_email">Используйте назначенный логин или email в @%1$s</string>
+    <string name="login_invalid_domain_suffix">Invalid domain suffix</string>
     <string name="login_invalid_symbol">Invalid symbol. If you cannot find it, please contact the school</string>
     <string name="login_invalid_symbol_definitely">Don\'t make this up! If you cannot find it, please contact the school</string>
     <string name="login_incorrect_symbol">Ученик не найден. Проверьте symbol и выбранный тип дненика UONET+</string>
@@ -97,8 +98,8 @@
     <string name="main_log_in">Войти</string>
     <string name="main_session_expired">Сеанс истёк</string>
     <string name="main_session_relogin">Сеанс истёк, авторизуйтесь снова</string>
-    <string name="main_expired_credentials_description">Your account password has been changed. You need to log in to Wulkanowy again</string>
-    <string name="main_expired_credentials_title">Password changed</string>
+    <string name="main_expired_credentials_title">Password has expired or been changed</string>
+    <string name="main_expired_credentials_description">Your account password has expired or been changed. You will need to log in to Wulkanowy again</string>
     <string name="main_support_title">Поддержка приложения</string>
     <string name="main_support_description">Вам нравится это приложение? Поддержите его разработку, включив неинвазивную рекламу, которую можно отключить в любое время</string>
     <string name="main_support_positive">Включить рекламу</string>
@@ -117,6 +118,7 @@
     <string name="grade_summary_points">Сумма баллов</string>
     <string name="grade_summary_final_grade">Итоговая оценка</string>
     <string name="grade_summary_predicted_grade">Ожидаемая оценка</string>
+    <string name="grade_summary_descriptive">Descriptive grade</string>
     <string name="grade_summary_calculated_average">Рассчитанная средняя оценка</string>
     <string name="grade_summary_calculated_average_help_dialog_title">Как работает \"Рассчитанная средняя оценка\"?</string>
     <string name="grade_summary_calculated_average_help_dialog_message">Рассчитанная средняя оценка - это среднее арифметическое, рассчитанное на основе средних оценок по предметам. Это позволяет узнать приблизительную итоговую среднюю оценку. Она рассчитывается способом, выбранным пользователем в настройках приложения. Рекомендуется выбрать подходящий вариант, так как каждая школа по разному считает среднюю оценку. Кроме того, если ваша школа выставляет средние оценки по предметам на странице Vulcan, приложение просто загрузит их. Это можно изменить, заставив приложение считать среднюю оценку в настройках.\n\n<b>Средняя из оценок выбранного семестра</b>:\n1. Вычисление средневзвешенного значения по каждому предмету за семестр\n2.Суммирование вычисленных значений\n3. Вычисление среднего арифметического суммированных значений\n\n<b>Средняя из средних оценок семестров</b>:\n1.Расчет средневзвешенного значения для каждого предмета в семестрах. \n2. Вычисление среднего арифметического из средневзвешенных значений для каждого предмета в семестрах.\n3. Суммирование средних арифметических\n4. Вычисление среднего арифматического из суммированных значений\n\n<b>Средняя из оценок со всего года:</b>\n1. Расчет средневзвешенного значения по каждому предмету за год. Итоговое среднее значение за 1 семестр не имеет значения.\n2. Суммирование вычисленных средних\n3. Расчет среднего арифметического суммированных чисел</string>
@@ -160,6 +162,12 @@
         <item quantity="many">Новые итоговые оценки</item>
         <item quantity="other">Новые итоговые оценки</item>
     </plurals>
+    <plurals name="grade_new_items_descriptive">
+        <item quantity="one">New descriptive grade</item>
+        <item quantity="few">New descriptive grades</item>
+        <item quantity="many">New descriptive grades</item>
+        <item quantity="other">New descriptive grades</item>
+    </plurals>
     <plurals name="grade_notify_new_items">
         <item quantity="one">Вы получили %1$d новую оценку</item>
         <item quantity="few">Вы получили %1$d новые оценки</item>
@@ -177,6 +185,12 @@
         <item quantity="few">Вы получили %1$d новых итоговых оценки</item>
         <item quantity="many">Вы получили %1$d новых итоговых оценок</item>
         <item quantity="other">Вы получили %1$d новых итоговые оценки</item>
+    </plurals>
+    <plurals name="grade_notify_new_items_descriptive">
+        <item quantity="one">You received %1$d descriptive grade</item>
+        <item quantity="few">You received %1$d descriptive grades</item>
+        <item quantity="many">You received %1$d descriptive grades</item>
+        <item quantity="other">You received %1$d descriptive grades</item>
     </plurals>
     <!--Timetable-->
     <string name="timetable_lesson">Урок</string>
@@ -322,8 +336,10 @@
     <string name="message_forward">Переслать</string>
     <string name="message_select_all">Выбрать все</string>
     <string name="message_unselect_all">Отменить выбор</string>
+    <string name="message_restore_from_trash">Restore from trash</string>
     <string name="message_move_to_trash">Перенести в корзину</string>
     <string name="message_delete_forever">Удалить навсегда</string>
+    <string name="message_restore_success">Message restored successfully</string>
     <string name="message_delete_success">Сообщение успешно удалено</string>
     <string name="message_mailbox_type_student">ученик</string>
     <string name="message_mailbox_type_parent">родитель</string>
@@ -369,6 +385,7 @@
         <item quantity="other">%1$d выбрано</item>
     </plurals>
     <string name="message_messages_deleted">Сообщение удалено</string>
+    <string name="message_messages_restored">Messages restored</string>
     <string name="message_mailbox_chooser_title">Выбрать почтовый ящик</string>
     <string name="message_incognito_mode_on">Incognito mode is on</string>
     <string name="message_incognito_description">Thanks to incognito mode sender is not notified when you read the message</string>
@@ -835,13 +852,16 @@
     <string name="auth_description">Для работы приложения нам необходимо подтвердить вашу личность. Введите PESEL учащегося &lt;b&gt;%1$s&lt;/b&gt; в поле ниже</string>
     <string name="auth_button_skip">Пропустить сейчас</string>
     <!--Captcha-->
-    <string name="captcha_dialog_title">Verification is in progress. Wait…</string>
+    <string name="captcha_dialog_title">VULCAN\'s website requires verification</string>
+    <string name="captcha_dialog_description"><b>Why am I seeing this?</b>\nThe register website from which Wulkanowy downloads data displays the same screen as above, so Wulkanowy must also show it to be able to download data from this website. There\'s no way around it</string>
     <string name="captcha_verified_message">Verified successfully</string>
     <!--Errors-->
     <string name="error_no_internet">Интернет-соединение отсутствует</string>
     <string name="error_invalid_device_datetime">Произошла ошибка. Проверьте время на вашем устройстве</string>
+    <string name="error_account_inactive">This account is inactive. Try logging in again</string>
     <string name="error_timeout">Не удалось подключиться к дневнику. Возможно, сервера перегружены, повторите попытку позже</string>
     <string name="error_login_failed">Не удалось загрузить данные, повторите попытку позже</string>
+    <string name="error_password_invalid">Your password has expired or been changed. Please log in again</string>
     <string name="error_password_change_required">Необходимо изменить пароль дневника</string>
     <string name="error_service_unavailable">UONET+ проводит техническое обслуживание, повторите попытку позже</string>
     <string name="error_unknown_uonet">Неизвестная ошибка дневника UONET+, повторите попытку позже</string>
@@ -851,4 +871,9 @@
     <string name="error_feature_disabled">Функция отключена вашей школой</string>
     <string name="error_feature_not_available">Функция недоступна в режиме Mobile API. Воспользуйтесь другим режимом</string>
     <string name="error_field_required">Это поле обязательно</string>
+    <!-- Mute system -->
+    <string name="message_mute">Mute</string>
+    <string name="message_unmute">Unmute</string>
+    <string name="message_mute_success">You have muted this user</string>
+    <string name="message_unmute_success">You have unmuted this user</string>
 </resources>
